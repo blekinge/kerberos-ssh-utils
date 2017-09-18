@@ -1,0 +1,12 @@
+#Relevant parts of the ssh config. Add this to ~/.ssh/config
+
+# Do not hash the values in known hosts, as this make it human unreadable
+HashKnownHosts no
+
+Host kac*
+  ForwardAgent yes
+  GSSAPIDelegateCredentials yes
+  GSSAPITrustDns yes
+  GSSAPIAuthentication yes
+  CanonicalizeHostname yes
+  CanonicalDomains kac.sblokalnet

@@ -1,0 +1,9 @@
+#Put this file in your path somewhere, such as ~/bin/
+# usage: ssh_abr kac-proj-000 to start a passwordless ssh session without use ssh keys
+
+#The purpose of this is to log in to a server with kerberos, without changing your local kerberos session.
+# This have been very relevant for me, as I have to juggle the "abr" and "abrsadm" accounts
+
+CLUSTERUSER=abr
+env KRB5CCNAME=/tmp/${CLUSTERUSER}_kac kinit -kt ~/.ssh/${CLUSTERUSER}.keytab ${CLUSTERUSER}@KAC.SBLOKALNET
+env KRB5CCNAME=/tmp/${CLUSTERUSER}_kac ssh -l ${CLUSTERUSER} $*
