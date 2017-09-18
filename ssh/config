@@ -3,7 +3,7 @@
 # Do not hash the values in known hosts, as this make it human unreadable
 HashKnownHosts no
 
-Host kac*
+Host kac-*
   ForwardAgent yes
   GSSAPIDelegateCredentials yes
   GSSAPITrustDns yes
