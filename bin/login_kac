@@ -15,6 +15,11 @@ kinit(){
 }
 export kinit
 
+kdestroy(){
+    /usr/bin/kdestroy $* && updatePS1
+}
+export kdestroy
+
 #Switch between kerberos accounts
 switch_user(){
     local newUser="$1"
