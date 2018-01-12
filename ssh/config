@@ -1,5 +1,3 @@
-#Relevant parts of the ssh config. Add this to ~/.ssh/config
-
 # Do not hash the values in known hosts, as this make it human unreadable
 HashKnownHosts no
 
@@ -9,4 +7,5 @@ Host kac-*
   GSSAPITrustDns yes
   GSSAPIAuthentication yes
   CanonicalizeHostname yes
-  CanonicalDomains kac.sblokalnet
+  CanonicalDomains kac.sblokalnet kach.sblokalnet
+  CanonicalizeFallbackLocal yes

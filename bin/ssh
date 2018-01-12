@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+args="$@"
+
+#Find the host
+userHost=$(echo -e "$args" | grep -o "[^ ]*kac-[^ ]*" )
+
+#if the hostname could not be found or if no user is specified, just ssh directly
+echo $userHost | grep -q '@' || exec env KRB5CCNAME="/tmp/krb5cc_$UID" /usr/bin/ssh $*
+
+#Split user and hostname
+clusterUser=$(echo $userHost | cut -d'@' -f1)
+host=$(echo $userHost | cut -d'@' -f2)
+
+echo $clusterUser | grep -q -x "root" && \
+    echo "root user should not use Kerberos" >&2 &&
+    exec /usr/bin/ssh $*
+
+#Kac host and user, login with relevant ticket
+echo "Attempting Login with kerberos ticket /tmp/${clusterUser}_kac.ticket" >&2
+TICKET="/tmp/${clusterUser}_kac.ticket"
+
+(export KRB5CCNAME="$TICKET"; klist -s || kinit "${clusterUser}@KAC.SBLOKALNET")
+
+exec env KRB5CCNAME="$TICKET" /usr/bin/ssh -l "${clusterUser}" $*

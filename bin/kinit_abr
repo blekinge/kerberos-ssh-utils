@@ -1,2 +1,0 @@
-kdestroy
-kinit -kt ~/.ssh/abr.keytab abr@KAC.SBLOKALNET
