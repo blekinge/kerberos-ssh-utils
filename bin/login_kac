@@ -1,11 +1,81 @@
 #!/usr/bin/env bash
 
+#update prompt with kerberos user
+updatePS1(){
+    local kerberosUser=$( (klist 2>/dev/null || echo "") | grep -oP 'principal: \K\w+' )
+    local PS_CLEANED=$(echo "$PS1" | sed 's/(krb:\w*) //g')
+    export PS1="$PS_CLEANED"
+    [ ! -z "$kerberosUser" ] && export PS1="(krb:$kerberosUser) $PS1"
+}
+updatePS1
+
+#Update the prompt after successfull kinits
+kinit(){
+    /usr/bin/kinit $* && updatePS1
+}
+export kinit
+
+#Switch between kerberos accounts
 switch_user(){
     local newUser="$1"
     local globalTicket="/tmp/krb5cc_$UID"
-    local userTicket="/tmp/${newUser}_kac.ticket"
-    klist -c "${userTicket}" -s || kinit -c "${userTicket}" "${newUser}@KAC.SBLOKALNET"
-    rm -f "$globalTicket"
-    ln -s "${userTicket}" "$globalTicket"
+    if [ -n "$newUser" ]; then
+        local userTicket="/tmp/${newUser}_kac.ticket"
+        klist -c "${userTicket}" -s || /usr/bin/kinit -c "${userTicket}" "${newUser}@KAC.SBLOKALNET"
+        rm -f "$globalTicket"
+        ln -s "${userTicket}" "$globalTicket"
+    else
+        rm -f "$globalTicket"
+    fi
+    updatePS1
 }
+
+#autocomplete for logged in users
+_switch_user()
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="$(cd /tmp/ && ls *.ticket | sed 's/_kac\.ticket//g')"
+
+    if [[ ${cur} == * ]] ; then
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    fi
+}
+complete -F _switch_user switch_user
+
+function ssh(){
+(   #Subshell to handle exit correctly with the exec statements
+
+    #Find the kac host
+    local userHost=$(echo -e "$@" | grep -o "[^ ]*kac-[^ ]*" )
+
+    #If kac host not found, just ssh
+    [ -n "$userHost" ] || exec /usr/bin/ssh $*
+
+    #if no user is specified, just ssh directly
+    [[ "$userHost" == *"@"* ]] || exec /usr/bin/ssh $*
+
+    #Split user and hostname
+    local clusterUser=$(echo $userHost | cut -d'@' -f1)
+    local host=$(echo $userHost | cut -d'@' -f2)
+
+    if [ "$clusterUser" == "root" ]; then
+        echo "root user should not use Kerberos" >&2
+        exec /usr/bin/ssh $*
+    fi
+
+
+    userTicket="/tmp/${clusterUser}_kac.ticket"
+    #Kac host and user, login with relevant ticket
+    echo "Attempting Login with kerberos ticket $userTicket" >&2
+
+    klist -c "${userTicket}" -s || /usr/bin/kinit -c "${userTicket}" "${clusterUser}@KAC.SBLOKALNET"
+
+    exec env KRB5CCNAME="$userTicket" /usr/bin/ssh -l "${clusterUser}" $*
+
+)}
+export ssh
 
