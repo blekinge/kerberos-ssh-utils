@@ -51,36 +51,61 @@ _switch_user()
 }
 complete -F _switch_user switch_user
 
-function ssh(){
+
+function _log_debug(){
+    local message="$@"
+    echo " -> $message" >&2
+    return 0;
+}
+
+
+ssh() {
 (   #Subshell to handle exit correctly with the exec statements
 
     #Find the kac host
     local userHost=$(echo -e "$@" | grep -o "[^ ]*kac-[^ ]*" )
 
     #If kac host not found, just ssh
-    [ -n "$userHost" ] || exec /usr/bin/ssh $*
+    if [ -z "$userHost" ];then
+        local cmd="/usr/bin/ssh $*"
+        _log_debug ${cmd}
+        exec ${cmd}
+    fi
 
-    #if no user is specified, just ssh directly
-    [[ "$userHost" == *"@"* ]] || exec /usr/bin/ssh $*
+    #if no user is specified, try to get the user from kerberos
+    if [[ "$userHost" != *"@"* ]]; then
+        local kerberosUser=$( (klist 2>/dev/null || echo "") | grep -oP 'principal: \K\w+' )
+        if [ -n "$kerberosUser" ]; then
+            # If the kerberos ticket specify a user, SSH as him
+            local cmd="/usr/bin/ssh -l "${kerberosUser}" $*"
+            _log_debug ${cmd}
+            exec ${cmd}
+        fi
+    fi
 
     #Split user and hostname
     local clusterUser=$(echo $userHost | cut -d'@' -f1)
     local host=$(echo $userHost | cut -d'@' -f2)
 
     if [ "$clusterUser" == "root" ]; then
-        echo "root user should not use Kerberos" >&2
-        exec /usr/bin/ssh $*
+        local cmd="/usr/bin/ssh $*"
+        _log_debug ${cmd}
+        exec ${cmd}
     fi
 
-
     userTicket="/tmp/${clusterUser}_kac.ticket"
-    #Kac host and user, login with relevant ticket
-    echo "Attempting Login with kerberos ticket $userTicket" >&2
 
-    klist -c "${userTicket}" -s || /usr/bin/kinit -c "${userTicket}" "${clusterUser}@KAC.SBLOKALNET"
+    local cmd="/usr/bin/klist -c ${userTicket} -s"
+    _log_debug ${cmd}
+    eval $cmd || (
+        local cmd="/usr/bin/kinit -c ${userTicket} ${clusterUser}@KAC.SBLOKALNET"
+        _log_debug ${cmd}
+        eval ${cmd}
+    )
 
-    exec env KRB5CCNAME="$userTicket" /usr/bin/ssh -l "${clusterUser}" $*
-
+    local cmd="env KRB5CCNAME=$userTicket /usr/bin/ssh -l ${clusterUser} $*"
+    _log_debug ${cmd}
+    exec ${cmd}
 )}
 export ssh
 
