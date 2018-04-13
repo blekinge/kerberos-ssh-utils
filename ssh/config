@@ -7,5 +7,5 @@ Host kac-*
   GSSAPITrustDns yes
   GSSAPIAuthentication yes
   CanonicalizeHostname yes
-  CanonicalDomains kac.sblokalnet kach.sblokalnet
+  CanonicalDomains kach.sblokalnet kac.sblokalnet
   CanonicalizeFallbackLocal yes
