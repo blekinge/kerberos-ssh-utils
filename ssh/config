@@ -1,11 +1,19 @@
 # Do not hash the values in known hosts, as this make it human unreadable
 HashKnownHosts no
 
-Host kac-*
+Host *.sblokalnet
   ForwardAgent yes
   GSSAPIDelegateCredentials yes
   GSSAPITrustDns yes
   GSSAPIAuthentication yes
+  user $USER
+
+Host kac-man-* kac-sto-* kac-adm-* kac-data-*
   CanonicalizeHostname yes
-  CanonicalDomains kac.sblokalnet kach.sblokalnet
+  CanonicalDomains kac.sblokalnet
+  CanonicalizeFallbackLocal yes
+
+Host kac-*
+  CanonicalizeHostname yes
+  CanonicalDomains kach.sblokalnet
   CanonicalizeFallbackLocal yes
