@@ -42,9 +42,9 @@ _switch_user()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="$(cd /tmp/ && ls *.ticket | sed 's/_kac\.ticket//g')"
+    opts="$(cd /tmp/ && ls *.ticket 2>/dev/null | sed 's/_kac\.ticket//g')"
 
-    if [[ ${cur} == * ]] ; then
+    if [ "$COMP_CWORD" -eq 1 ] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
         return 0
     fi
