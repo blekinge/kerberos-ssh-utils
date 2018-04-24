@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 #update prompt with kerberos user
-updatePS1(){
+function updatePS1(){
     local kerberosUser=$( (klist 2>/dev/null || echo "") | grep -oP 'principal: \K\w+' )
     local PS_CLEANED=$(echo "$PS1" | sed 's/(krb:\w*) //g')
     export PS1="$PS_CLEANED"
@@ -10,18 +10,18 @@ updatePS1(){
 updatePS1
 
 #Update the prompt after successfull kinits
-kinit(){
+function kinit(){
     /usr/bin/kinit $* && updatePS1
 }
 export kinit
 
-kdestroy(){
+function kdestroy(){
     /usr/bin/kdestroy $* && updatePS1
 }
 export kdestroy
 
 #Switch between kerberos accounts
-switch_user(){
+function switch_user(){
     local newUser="$1"
     local globalTicket="/tmp/krb5cc_$UID"
     if [ -n "$newUser" ]; then
@@ -36,7 +36,7 @@ switch_user(){
 }
 
 #autocomplete for logged in users
-_switch_user()
+function _switch_user()
 {
     local cur prev opts
     COMPREPLY=()
@@ -59,7 +59,7 @@ function _log_debug(){
 }
 
 
-ssh() {
+function ssh() {
 (   #Subshell to handle exit correctly with the exec statements
 
     #Find the kac host
@@ -115,4 +115,6 @@ ssh() {
     exec ${cmd}
 )}
 export ssh
+
+
 
