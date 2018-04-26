@@ -8,7 +8,7 @@ Host *.sblokalnet
   GSSAPIAuthentication yes
   user $USER
 
-Host kac-man-* kac-sto-* kac-adm-* kac-data-*
+Host kac-man-*
   CanonicalizeHostname yes
   CanonicalDomains kac.sblokalnet
   CanonicalizeFallbackLocal yes
