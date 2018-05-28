@@ -9,8 +9,8 @@ grep -q "source ~/bin/login_kac" ~/.bash_aliases || (echo "source ~/bin/login_ka
 diff -w $SCRIPT_DIR/etc/krb5.conf /etc/krb5.conf || \
     echo "You must manually merge $SCRIPT_DIR/etc/krb5.conf and /etc/krb5.conf"
 
-diff $SCRIPT_DIR/ssh/config ~/.ssh/config | grep  '^<' && \
-    echo "You must manually merge $SCRIPT_DIR/ssh/config and ~/.ssh/config"
+diff $SCRIPT_DIR/ssh/ssh_config ~/.ssh/config | grep  '^<' && \
+    echo "You must manually merge $SCRIPT_DIR/ssh/ssh_config and ~/.ssh/config"
 
 
 #Update google chrome desktop links
