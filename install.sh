@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
+set -x
 
 SCRIPT_DIR=$(dirname $(readlink -f $BASH_SOURCE[0]))
 
-cp $SCRIPT_DIR/bin/* ~/bin/
+cp -f -p $SCRIPT_DIR/bin/* ~/bin/
 
 grep -q "source ~/bin/login_kac" ~/.bash_aliases || (echo "source ~/bin/login_kac" >> ~/.bash_aliases)
 
