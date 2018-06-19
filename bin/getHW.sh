@@ -26,4 +26,4 @@ echo '  Serienummer='$(sudo dmidecode -s system-serial-number)
 #echo ' MAC Addresser='$(lshw -C network -xml 2>/dev/null | xmllint --xpath "/list/node[configuration/setting[@id='driver']/@value!='bridge']/serial" - | sed 's/></>,</' | sed 's|<[^>]*>||g')
 echo '  MAC Addresser='$(lshw -xml 2>/dev/null| xmllint --xpath "//node[@id='network']/serial" - | sed 's/></>,</' | sed 's|<[^>]*>||g')
 
-echo "  Kontor="$(curl -s "http://hyperion:8381/spot/services/medarbejder/search/$(git config --get user.email)" | jq '.medarbejdere[0].location' -r)
+echo "  Kontor="$(curl -s -- "http://hyperion:8381/spot/services/medarbejder/search/$(git config --get user.email)" | jq '.medarbejdere[0].location' -r)

@@ -37,10 +37,10 @@ function switch_user(){
     if [ -n "$newUser" ]; then
         local userTicket="/tmp/${newUser}_kac.ticket"
         klist -c "${userTicket}" -s || /usr/bin/kinit -c "${userTicket}" "${newUser}@KAC.SBLOKALNET"
-        rm -f "$globalTicket"
-        ln -s "${userTicket}" "$globalTicket"
+        rm -f -- "$globalTicket"
+        ln -s -- "${userTicket}" "$globalTicket"
     else
-        rm -f "$globalTicket"
+        rm -f -- "$globalTicket"
     fi
 }
 
@@ -51,7 +51,7 @@ function _switch_user()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="$(cd /tmp/ && ls *.ticket 2>/dev/null | sed 's/_kac\.ticket//g')"
+    opts="$(cd /tmp/ && ls -- *.ticket 2>/dev/null | sed 's/_kac\.ticket//g')"
 
     if [ "$COMP_CWORD" -eq 1 ] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
@@ -72,7 +72,7 @@ function ssh() {
 (   #Subshell to handle exit correctly with the exec statements
 
     #Find the kac host
-    local userHost=$(echo -e "$@" | grep -o "[^ ]*kac-[^ ]*" )
+    local userHost=$(echo -e -- "$@" | grep -o "[^ ]*kac-[^ ]*" )
 
     #If kac host not found, just ssh
     if [ -z "$userHost" ];then
@@ -111,15 +111,15 @@ function ssh() {
 
     userTicket="/tmp/${user}_kac.ticket"
 
-    local cmd="/usr/bin/klist -c ${userTicket} -s"
+    local cmd="/usr/bin/klist -s -c -- ${userTicket}"
     _log_debug ${cmd}
     eval $cmd || (
-        local cmd="/usr/bin/kinit -c ${userTicket} ${user}@KAC.SBLOKALNET"
+        local cmd="/usr/bin/kinit -c ${userTicket} -- ${user}@KAC.SBLOKALNET"
         _log_debug ${cmd}
         eval ${cmd}
     )
 
-    local cmd="env KRB5CCNAME=$userTicket /usr/bin/ssh -l ${user} $*"
+    local cmd="env KRB5CCNAME=\"$userTicket\" /usr/bin/ssh -l ${user} $*"
     _log_debug ${cmd}
     exec ${cmd}
 )}

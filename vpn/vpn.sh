@@ -2,4 +2,4 @@
 
 ORDER=${1:-show}
 
-nmcli connection $ORDER "kac-gway-001.kach.sblokalnet"
+nmcli connection "$ORDER" -- "kac-gway-001.kach.sblokalnet"

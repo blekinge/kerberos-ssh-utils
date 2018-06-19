@@ -16,14 +16,14 @@ PROJECT="$2"
 
 sudo -i <<EOF
 echo "Get Kerberos ticket for the HDFS user"
-kinit -kt /etc/security/keytabs/hdfs.headless.keytab hdfs
+kinit -kt "/etc/security/keytabs/hdfs.headless.keytab" -- hdfs
 echo "Reload sss_cache to ensure that ${USERNAME} is known"
-sss_cache -u ${USERNAME}
+sss_cache -u "${USERNAME}"
 echo "Creating HDFS homedir hdfs:///user/${USERNAME}"
-hdfs dfs -mkdir /user/${USERNAME}
-hdfs dfs -chown ${USERNAME}:${USERNAME} /user/${USERNAME}
+hdfs dfs -mkdir -- "/user/${USERNAME}"
+hdfs dfs -chown -- "${USERNAME}:${USERNAME}" "/user/${USERNAME}"
 EOF
 
 echo "Syncing all groups (to sync $PROJECT) with Ambari. This will require Ambari *sadm Login"
-grep ${PROJECT} /etc/ambari-server/ambari-groups.csv || echo -n ",$PROJECT" >> /etc/ambari-server/ambari-groups.csv
+grep "${PROJECT}" /etc/ambari-server/ambari-groups.csv || echo -n ",$PROJECT" >> /etc/ambari-server/ambari-groups.csv
 sudo ambari-server sync-ldap --groups=/etc/ambari-server/ambari-groups.csv
