@@ -113,13 +113,13 @@ function ssh() {
 
     local cmd="/usr/bin/klist -s -c -- ${userTicket}"
     _log_debug ${cmd}
-    eval $cmd || (
+    eval ${cmd} || (
         local cmd="/usr/bin/kinit -c ${userTicket} -- ${user}@KAC.SBLOKALNET"
         _log_debug ${cmd}
         eval ${cmd}
     )
 
-    local cmd="env KRB5CCNAME=\"$userTicket\" /usr/bin/ssh -l ${user} $*"
+    local cmd="env KRB5CCNAME=$userTicket /usr/bin/ssh -l ${user} $*"
     _log_debug ${cmd}
     exec ${cmd}
 )}
