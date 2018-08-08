@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# disable the default virtualenv prompt change, as we use our own
+export VIRTUAL_ENV_DISABLE_PROMPT=1
+
 
 PROMPT_COMMAND=__prompt_command # Func to gen PS1 after CMDs
 
@@ -24,6 +27,11 @@ __prompt_command() {
     local kerberos="$( (klist 2>/dev/null || echo '') | grep -oP 'principal: \K\w+')"
     if [ -n "${kerberos}" ]; then
         PS1+="(krb:$kerberos) "
+    fi
+
+    #Include the virtualenv in the prompt
+    if [ -n "$VIRTUAL_ENV" ]; then
+        PS1+="(venv:${VIRTUAL_ENV##*/}) "
     fi
 
     #User, host, workingDir
