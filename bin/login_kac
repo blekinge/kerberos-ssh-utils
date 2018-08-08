@@ -72,9 +72,11 @@ complete -F _switch_user switch_user
 
 
 function _log_debug(){
-    local message="$@"
-    echo " -> $message" >&2
-    return 0;
+    if [ -n "$DEBUG" ]; then
+        local message="$@"
+        echo " -> $message" >&2
+        return 0;
+    fi
 }
 
 
