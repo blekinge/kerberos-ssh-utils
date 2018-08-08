@@ -81,14 +81,21 @@ function _log_debug(){
 function ssh() {
 (   #Subshell to handle exit correctly with the exec statements
 
+    #Use this to break out when deep in subshell
+    set -E
+    trap '[ "$?" -ne 77 ] || exit 77' ERR
+
+    local sshCommand="/usr/bin/ssh"
+
+
     #Find the kac host
     local userHost=$(echo -e "$@" | grep -o "\skac-\S*\|\S*@kac-\S*" | sed 's/\s//g' )
     _log_debug "userHost='${userHost}'"
 
     #If kac host not found, just ssh
     if [ -z "$userHost" ];then
-        local cmd="/usr/bin/ssh $*"
-        _log_debug ${cmd}
+        local cmd="$sshCommand $*"
+        _log_debug "${cmd}"
         exec ${cmd}
     fi
 
@@ -106,8 +113,8 @@ function ssh() {
         local kerberosUser=$( (klist 2>/dev/null || echo "") | grep -oP 'principal: \K\w+' )
         if [ -n "$kerberosUser" ]; then
             # If the kerberos ticket specify a user, SSH as him
-            local cmd="/usr/bin/ssh -l "${kerberosUser}" $*"
-            _log_debug ${cmd}
+            local cmd="$sshCommand -l "${kerberosUser}" $*"
+            _log_debug "${cmd}"
             exec ${cmd}
         fi
     fi
@@ -121,8 +128,8 @@ function ssh() {
 
     #Do not do kerberos tricks if logging in as root
     if [ "$user" == "root" ]; then
-        local cmd="/usr/bin/ssh $*"
-        _log_debug ${cmd}
+        local cmd="$sshCommand $*"
+        _log_debug "${cmd}"
         exec ${cmd}
     fi
 
@@ -133,8 +140,9 @@ function ssh() {
     eval ${cmd} || (
         _log_debug "no ticket found so create one"
         local cmd="/usr/bin/kinit -c ${userTicket} -- ${user}@KAC.SBLOKALNET"
-        _log_debug ${cmd}
-        eval ${cmd}
+        _log_debug "${cmd}"
+        ##Exit 77 to break out from subshell
+        eval ${cmd} || exit 77
     )
 
     local cmd="env KRB5CCNAME=$userTicket /usr/bin/ssh -l ${user} $*"
