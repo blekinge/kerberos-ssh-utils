@@ -2,18 +2,36 @@
 HashKnownHosts no
 
 Host *.sblokalnet
+  #Forward agent so you can ssh further
   ForwardAgent yes
+  #Use Kerberos
   GSSAPIDelegateCredentials yes
   GSSAPITrustDns yes
   GSSAPIAuthentication yes
+  #Local user if nothing else is specified
   user $USER
 
-Host kac-man-*
+#Ovirt hosts that are NOT freeIPA controlled
+Host kac-man-* kac-adm-002
+  #Canonalise hostname to load the settings for *.sblokalnet
   CanonicalizeHostname yes
+  #Use the kac.sblokalnet network that is only reachable from inside KB
   CanonicalDomains kac.sblokalnet
   CanonicalizeFallbackLocal yes
+  #Do not use kerberos auth as they are not in freeIPA
+  GSSAPIAuthentication no
 
 Host kac-*
+  #Canonalise hostname to load the settings for *.sblokalnet
   CanonicalizeHostname yes
+  #kach.sblokalnet is only available through the VPN connection. Use it for all freeipa machines
   CanonicalDomains kach.sblokalnet
   CanonicalizeFallbackLocal yes
+  #All other kac machines ARE in freeipa, so use kerberos
+  GSSAPIAuthentication yes
+
+#This should be last, to ensure it does not override other settings, as the first hit wins
+Host *
+    ServerAliveInterval 240
+    #Do not use kerberos per default, as this gives delays when not on the KAC vpn (as the freeIPA server cannot be reached)
+    GSSAPIAuthentication no
