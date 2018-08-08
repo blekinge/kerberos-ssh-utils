@@ -18,12 +18,14 @@ __prompt_command() {
     local GREEN="\[\033[01;32m\]"
     local BLUE="\[\033[01;34m\]"
 
+    #Smiley for exit of last command
     if [ $EXIT == 0 ]; then
         PS1+="${YELLOW}:)${NORMAL} "
     else
         PS1+="${RED}:(${NORMAL} "
     fi
 
+    #Kerberos ticket user
     local kerberos="$( (klist 2>/dev/null || echo '') | grep -oP 'principal: \K\w+')"
     if [ -n "${kerberos}" ]; then
         PS1+="(krb:$kerberos) "
@@ -80,7 +82,8 @@ function ssh() {
 (   #Subshell to handle exit correctly with the exec statements
 
     #Find the kac host
-    local userHost=$(echo -e -- "$@" | grep -o "[^ ]*kac-[^ ]*" )
+    local userHost=$(echo -e "$@" | grep -o "\skac-\S*\|\S*@kac-\S*" | sed 's/\s//g' )
+    _log_debug "userHost='${userHost}'"
 
     #If kac host not found, just ssh
     if [ -z "$userHost" ];then
@@ -89,8 +92,13 @@ function ssh() {
         exec ${cmd}
     fi
 
-    local lUser=$(echo -e "$@" | grep -o '^.*kac-' | grep -o '\-l *[^ ]\+' | sed 's/^-l//g' | sed 's/ //g')
-    local hostUser=$(echo $userHost | grep '@' | cut -d'@' -f1)
+    # echo | find params before hostname | find param -l + value | remove -l and spaces
+    local lUser=$(echo -e "$@" | grep -o '^.*kac-' | grep -o '\-l\s*[^ ]\+' | sed 's/^-l\|\s//g')
+    _log_debug "-lUser='${lUser}'"
+
+    local hostUser=$(echo -e "$userHost" | grep '@' | cut -d'@' -f1)
+    _log_debug "hostUser='${hostUser}'"
+
     local specifiedUser=${hostUser:-$lUser}
 
     #If no user is specified, get user from current kerberos ticket
@@ -103,12 +111,13 @@ function ssh() {
             exec ${cmd}
         fi
     fi
+    #If we got here, when we did not get a kerberos User
 
     #Fallback to local user if nothing is specified
-    local user=${specifiedUser:-$USER}
+    local user="${specifiedUser:-$USER}"
 
     #Cut the host part of the url
-    local host=$(echo $userHost | cut -d'@' -f2)
+    local host=$(echo "$userHost" | cut -d'@' -f2)
 
     #Do not do kerberos tricks if logging in as root
     if [ "$user" == "root" ]; then
@@ -120,8 +129,9 @@ function ssh() {
     userTicket="/tmp/${user}_kac.ticket"
 
     local cmd="/usr/bin/klist -s -c -- ${userTicket}"
-    _log_debug ${cmd}
+    _log_debug "${cmd}"
     eval ${cmd} || (
+        _log_debug "no ticket found so create one"
         local cmd="/usr/bin/kinit -c ${userTicket} -- ${user}@KAC.SBLOKALNET"
         _log_debug ${cmd}
         eval ${cmd}
