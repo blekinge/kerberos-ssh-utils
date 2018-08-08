@@ -145,7 +145,7 @@ function ssh() {
         eval ${cmd} || exit 77
     )
 
-    local cmd="env KRB5CCNAME=$userTicket /usr/bin/ssh -l ${user} $*"
+    local cmd="env KRB5CCNAME=$userTicket $sshCommand -l ${user} $(echo $* | sed "s/\s*-l\s*$lUser//")"
     _log_debug ${cmd}
     exec ${cmd}
 )}
