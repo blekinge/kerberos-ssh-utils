@@ -92,7 +92,7 @@ function ssh() {
 
     _log_debug "args='$@'"
     #Find the kac host
-    local userHost=$(echo -e "$@" | grep -o "\skac-\S*\|\S*@kac-\S*" | sed 's/\s//g' )
+    local userHost=$(echo -e "$@" | grep -o "\(\(\s\+\|^\)kac-\S\+\)\|\(\S\+@kac-\S\+\)" | sed 's/\s//g' )
     _log_debug "userHost='${userHost}'"
 
     #If kac host not found, just ssh
