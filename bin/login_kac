@@ -86,6 +86,7 @@ function ssh() {
     #Use this to break out when deep in subshell
     set -E
     trap '[ "$?" -ne 77 ] || exit 77' ERR
+    #Trick from https://unix.stackexchange.com/a/48550
 
     local sshCommand="/usr/bin/ssh"
 
