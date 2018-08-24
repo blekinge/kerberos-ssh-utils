@@ -90,7 +90,7 @@ function ssh() {
 
     local sshCommand="/usr/bin/ssh"
 
-
+    _log_debug "args='$@'"
     #Find the kac host
     local userHost=$(echo -e "$@" | grep -o "\skac-\S*\|\S*@kac-\S*" | sed 's/\s//g' )
     _log_debug "userHost='${userHost}'"
