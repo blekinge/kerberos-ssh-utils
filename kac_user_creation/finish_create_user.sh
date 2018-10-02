@@ -12,9 +12,15 @@ hostname | grep kac-abri-001 || (>&2 echo 'must be executed on host kac-abri-001
 USAGE='Please use params USERNAME PROJECT'
 echo "Validating parameters $@"
 USERNAME="$1"
-[ -n ${USERNAME} ] || (>&2 echo "$USAGE" &&  exit 77)
+[ -n "${USERNAME}" ] || (>&2 echo "$USAGE" &&  exit 77)
 PROJECT="$2"
-[ -n ${PROJECT} ] || (>&2 echo "$USAGE" &&  exit 77)
+[ -n "${PROJECT}" ] || (>&2 echo "$USAGE" &&  exit 77)
+
+echo "Checking if $USERNAME exists"
+id -- "${USERNAME}" > /dev/null || (echo "User $USERNAME does not exists, aborting" && exit 77)
+
+echo "Checking if $USERNAME exists"
+getent group -- "${PROJECT}" || (echo "Project $PROJECT does not exists, aborting" && exit 77)
 
 
 sudo -i <<EOF
