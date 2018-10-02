@@ -7,7 +7,7 @@ set -x
 
 
 echo "Validating this host $(hostname)"
-hostname | grep kac-abri-001 || >&2 echo 'must be executed on host kac-abri-001' && exit 1
+hostname | grep kac-abri-001 || (>&2 echo 'must be executed on host kac-abri-001' && exit 77)
 
 USAGE='Please use params USERNAME PROJECT'
 echo "Validating parameters $@"
