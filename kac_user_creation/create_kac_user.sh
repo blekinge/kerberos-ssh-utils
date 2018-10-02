@@ -65,7 +65,7 @@ ipa group-add-member --user "${USERNAME}" -- vpnu
 
 echo "Make user home dir /data/home/$USERNAME"
 sudo mkdir -p -- "/data/home/${USERNAME}"
-sudo cp -u -- "/etc/skel/.bash*" "/data/home/${USERNAME}/"
+sudo cp -u -- /etc/skel/.bash* "/data/home/${USERNAME}/"
 sudo sss_cache -u "${USERNAME}"
 sudo chown -R -- "${USERNAME}:${USERNAME}" "/data/home/${USERNAME}"
 
