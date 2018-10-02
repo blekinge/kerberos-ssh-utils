@@ -32,10 +32,8 @@ fi
 echo "Found GID for project to be $group"
 
 echo "Checking if $USERNAME already exists"
-if ! id -- "${USERNAME}" > /dev/null ; then
-    echo "User $USERNAME already exists, aborting"
-    exit 1
-fi
+id -- "${USERNAME}" > /dev/null && (echo "User $USERNAME already exists, aborting" && exit 77)
+
 echo "$USERNAME does not exist"
 
 echo "Find next available UID, starting from GID=$group"
