@@ -69,12 +69,12 @@ sudo cp -u -- /etc/skel/.bash* "/data/home/${USERNAME}/"
 sudo sss_cache -u "${USERNAME}"
 sudo chown -R -- "${USERNAME}:${USERNAME}" "/data/home/${USERNAME}"
 
-INITIAL_PASSWORD=$(openssl rand -base64 12)
+INITIAL_PASSWORD=$(openssl rand -base64 25)
 echo "Set initial password $INITIAL_PASSWORD for $USERNAME"
 echo -e "${INITIAL_PASSWORD}\n${INITIAL_PASSWORD}\n" | ipa user-mod --password -- "${USERNAME}"
 
 echo "Change password so $USERNAME can log in"
-PASSWORD=$(openssl rand -base64 12)
+PASSWORD=$(openssl rand -base64 25)
 echo -e "${INITIAL_PASSWORD}\n${PASSWORD}\n${PASSWORD}\n" | kinit -c /tmp/null -- "${USERNAME}"
 
 echo -e "Created ${USERNAME} with password:\n${PASSWORD}"
