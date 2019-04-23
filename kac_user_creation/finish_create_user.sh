@@ -36,3 +36,7 @@ EOF
 echo "Syncing all groups (to sync $PROJECT) with Ambari. This will require Ambari *sadm Login"
 grep "${PROJECT}" /etc/ambari-server/ambari-groups.csv || echo -n ",$PROJECT" >> /etc/ambari-server/ambari-groups.csv
 sudo ambari-server sync-ldap --groups=/etc/ambari-server/ambari-groups.csv
+
+#https://docs.hortonworks.com/HDPDocuments/HDP2/HDP-2.6.5/bk_security/content/_existing_users_and_groups.html
+sudo ambari-server sync-ldap --existing
+
