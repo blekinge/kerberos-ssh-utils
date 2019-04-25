@@ -24,7 +24,7 @@ echo "Validating this host $(hostname)"
 hostname | grep kac-adm-001 || (>&2 echo 'must be executed on host kac-adm-001' && exit 77)
 
 echo "Get the group from the project name '$PROJECT'"
-group=$(ipa group-find --group-name=p005 --posix  | grep "GID:" | cut -d':' -f2 | sed 's/ //g')
+group=$(ipa group-find --group-name=${PROJECT} --posix  | grep "GID:" | cut -d':' -f2 | sed 's/ //g')
 if [ -z "$group" ]; then
     echo "you must create group with 'ipa group-add $PROJECT --gid=<GID>' before using this script"
     exit 1
