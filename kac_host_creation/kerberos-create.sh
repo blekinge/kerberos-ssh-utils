@@ -101,7 +101,7 @@ function distribute(){
             sudo cp \$PWD/\\\$encodedName \${FILE}
             sudo chown \${OWNER}:\${GROUP} \${FILE}
             sudo chmod \${PERM} \${FILE}
-	EOF
+EOF
     }"
 
     echo "# Distribute all the keytabs to the specified hosts"
