@@ -6,6 +6,13 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 PROMPT_COMMAND=__prompt_command # Func to gen PS1 after CMDs
 
+#Uses curl https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh -o ~/.bash-preexec.sh
+#and sourcing fron .bashrc
+#This prints the time before the exection
+PS0="\t "
+#This prints the command being executed
+preexec() { echo "'$1'"; }
+
 __prompt_command() {
     local EXIT="$?"             # This needs to be first
     PS1=""
@@ -25,6 +32,8 @@ __prompt_command() {
         PS1+="${RED}:(${NORMAL} "
     fi
 
+    PS1+="\t "
+
     #Kerberos ticket user
     if command -v klist > /dev/null 2>&1; then
         local kerberos="$( (klist 2>/dev/null || echo '') | grep -oP 'principal: \K\w+')"
@@ -41,6 +50,7 @@ __prompt_command() {
     #User, host, workingDir
     PS1+="$GREEN\u@\h$NORMAL:$BLUE\w$NORMAL\$ "
 }
+
 
 #Switch between kerberos accounts
 function switch_user(){
@@ -155,6 +165,3 @@ function ssh() {
     exec ${cmd}
 )}
 export ssh
-
-
-
