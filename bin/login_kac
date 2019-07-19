@@ -25,8 +25,8 @@ __prompt_command() {
         PS1+="${RED}:(${NORMAL} "
     fi
 
-    if command -v klist > /dev/null; then
-        #Kerberos ticket user
+    #Kerberos ticket user
+    if command -v klist > /dev/null 2>&1; then
         local kerberos="$( (klist 2>/dev/null || echo '') | grep -oP 'principal: \K\w+')"
         if [ -n "${kerberos}" ]; then
             PS1+="(krb:$kerberos) "
