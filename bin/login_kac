@@ -25,10 +25,12 @@ __prompt_command() {
         PS1+="${RED}:(${NORMAL} "
     fi
 
-    #Kerberos ticket user
-    local kerberos="$( (klist 2>/dev/null || echo '') | grep -oP 'principal: \K\w+')"
-    if [ -n "${kerberos}" ]; then
-        PS1+="(krb:$kerberos) "
+    if command -v klist > /dev/null; then
+        #Kerberos ticket user
+        local kerberos="$( (klist 2>/dev/null || echo '') | grep -oP 'principal: \K\w+')"
+        if [ -n "${kerberos}" ]; then
+            PS1+="(krb:$kerberos) "
+        fi
     fi
 
     #Include the virtualenv in the prompt
