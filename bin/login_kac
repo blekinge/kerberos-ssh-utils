@@ -62,6 +62,11 @@ __prompt_command() {
 
     #User, host, workingDir
     PS1+="$GREEN\u@\h$NORMAL:$BLUE\w$NORMAL\$ "
+
+    #Gnome terminal title
+    titleString="\u@\h:\w"
+    echo -ne "\033]0;${titleString@P}\007"
+
 }
 
 
