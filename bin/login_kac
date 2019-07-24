@@ -13,8 +13,12 @@ PS0="\t "
 #This prints the command being executed
 preexec() { echo "'$1'"; }
 
+previous_command_num=0
+
 __prompt_command() {
     local EXIT="$?"             # This needs to be first
+    var='\#' && last_command_num=${var@P}
+
     PS1=""
 
     local RESET="\[\017\]"
@@ -25,13 +29,22 @@ __prompt_command() {
     local GREEN="\[\033[01;32m\]"
     local BLUE="\[\033[01;34m\]"
 
-    #Smiley for exit of last command
-    if [ $EXIT == 0 ]; then
-        PS1+="${YELLOW}:)${NORMAL} "
+    if (( last_command_num <= previous_command_num )); then
+        #No new command, ignore this
+        EXIT=0
+        PS1+="   "
     else
-        PS1+="${RED}:(${NORMAL} "
+        #New command, handle it
+        previous_command_num=$last_command_num
+        #Smiley for exit of last command
+        if (( EXIT == 0 )); then
+            PS1+="${YELLOW}:)${NORMAL} "
+        else
+            PS1+="${RED}:(${NORMAL} "
+        fi
     fi
 
+    #Timestamp
     PS1+="\t "
 
     #Kerberos ticket user
