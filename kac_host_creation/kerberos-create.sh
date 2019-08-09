@@ -42,9 +42,14 @@ FKEYTAB_FILE_MODE=11
 FKEYTAB_FILE_INSTALLED=12
 
 function hosts(){
+
+
     #echo "$hosts"
     hosts=$(catLines |cut -d',' -f${FHOST} | sort -u) # Parse the unique hosts from kerberos.csv
+
     echo "# Find unique hosts and add them to freeIPA"
+    echo "# Run this as freeIPA admin on $IPA_HOST, i.e. 'ssh root@$IPA_HOST; kinit admin;'"
+
     for host in ${hosts}; do
         echo "ipa host-add '${host}'"
     done
@@ -55,6 +60,7 @@ function services(){
     services=$(catLines | grep ',SERVICE,' | cut -d',' -f${FPRINCIPAL_NAME} | sort -u) # Parse the unique services from kerberos.csv
     #echo "$services"
     echo "# Find unique services and add them to freeIPA"
+    echo "# Run this as freeIPA admin on $IPA_HOST, i.e. 'ssh root@$IPA_HOST; kinit admin;'"
     for service in ${services}; do
         echo "ipa service-add '${service}'"
     done
@@ -64,6 +70,8 @@ function services(){
 function keytabs(){
     principals=$(catLines | cut -d',' -f${FPRINCIPAL_NAME} | sort -u) # Parse the unique principals from kerberos.csv
     #echo "$principals"
+
+    echo "# Run this as root@$IPA_HOST:/root/cfgmount/keytabs/ with 'kinit admin'"
 
     echo "# Function to create keytab"
     echo "function ipa_get_keytab() {
@@ -91,7 +99,10 @@ function distribute(){
 
     echo "# Function for uploading the keytab of a specific principal to a specific host, with the right permissions"
 
+    echo "# Run this as root@$IPA_HOST:/root/cfgmount/keytabs/"
+
     echo "function upload(){
+        chmod o+r \$PWD/\\\$encodedName #Make publically readable to ensure that root-squashed root can read them
         ssh \${HOST} <<-EOF
             set -o nounset #Stop script if attempting to use an unset variable
             set -o errexit #Stop script if any command fails
@@ -102,6 +113,7 @@ function distribute(){
             sudo chown \${OWNER}:\${GROUP} \${FILE}
             sudo chmod \${PERM} \${FILE}
 EOF
+        chmod o-r \$PWD/\\\$encodedName #Remove publically readable
     }"
 
     echo "# Distribute all the keytabs to the specified hosts"
