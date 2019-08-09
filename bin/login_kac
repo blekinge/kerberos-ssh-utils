@@ -119,10 +119,12 @@ function ssh() {
     #Trick from https://unix.stackexchange.com/a/48550
 
     local sshCommand="/usr/bin/ssh"
-
+    set -x
     _log_debug "args='$@'"
     #Find the kac host
-    local userHost=$(echo -e "$@" | grep -o "\(\(\s\+\|^\)kac-\S\+\)\|\(\S\+@kac-\S\+\)" | sed 's/\s//g' )
+    firstPart="${@%%-- *}"
+    #TODO split the command proper to figure out what is flags and what is host and what is command
+    local userHost=$(echo -e "$firstPart" | grep -o -E '((\s+|^)kac-\S+)|(\S+@kac-\S+)' | head -1 | sed 's/\s//g' )
     _log_debug "userHost='${userHost}'"
 
     #If kac host not found, just ssh
@@ -140,6 +142,7 @@ function ssh() {
     _log_debug "hostUser='${hostUser}'"
 
     local specifiedUser=${hostUser:-$lUser}
+    set +x
 
     #If no user is specified, get user from current kerberos ticket
     if [ -z "$specifiedUser" ]; then
