@@ -19,6 +19,10 @@ __prompt_command() {
     local EXIT="$?"             # This needs to be first
     var='\#' && last_command_num=${var@P}
 
+	#Gnome terminal title
+    titleString="\u@\h:\w"
+    echo -ne "\033]0;${titleString@P}\007"
+
     PS1=""
 
     local RESET="\[\017\]"
