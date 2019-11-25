@@ -123,7 +123,7 @@ function ssh() {
     #Trick from https://unix.stackexchange.com/a/48550
 
     local sshCommand="/usr/bin/ssh"
-    set -x
+    #set -x
     _log_debug "args='$@'"
     #Find the kac host
     firstPart="${@%%-- *}"
