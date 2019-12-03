@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+SCRIPT_DIR=$(dirname $(readlink -f $BASH_SOURCE[0]))
+
 set -x
 trap '[ "$?" -ne 77 ] || exit 1' ERR
 
@@ -76,7 +78,12 @@ echo "Set initial password $INITIAL_PASSWORD for $USERNAME"
 echo -e "${INITIAL_PASSWORD}\n${INITIAL_PASSWORD}\n" | ipa user-mod --password -- "${USERNAME}"
 
 echo "Change password so $USERNAME can log in"
-PASSWORD=$(openssl rand -base64 25)
+PASSWORD=$($SCRIPT_DIR/../kac-kerberos/bin/passPhraseGen.sh \
+	-j '' \
+	-c \
+	-l 1 \
+	-f "$SCRIPT_DIR/../kac-kerberos/bin/wordlists/dansk-ordliste-unum.txt" \
+	-m 25)
 echo -e "${INITIAL_PASSWORD}\n${PASSWORD}\n${PASSWORD}\n" | kinit -c /tmp/null -- "${USERNAME}"
 
 echo -e "Created ${USERNAME} with password:\n${PASSWORD}"
