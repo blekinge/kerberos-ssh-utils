@@ -1,0 +1,53 @@
+root@kac-data-001 kac kac-data kac-abri
+root@kac-data-002 kac kac-data kac-abri
+root@kac-data-003 kac kac-data kac-abri
+root@kac-data-004 kac kac-data kac-abri
+root@kac-data-005 kac kac-data kac-abri
+root@kac-data-006 kac kac-data kac-abri
+root@kac-data-007 kac kac-data kac-abri
+root@kac-data-008 kac kac-data kac-abri
+
+root@kac-hdfs-001 kac kac-hdfs kac-virt kac-abri
+root@kac-hdfs-002 kac kac-hdfs kac-virt kac-abri
+
+root@kac-hive-001 kac kac-hive kac-virt kac-abri
+root@kac-hive-002 kac kac-hdfs kac-virt kac-abri
+
+root@kac-zkpr-001 kac kac-zkpr kac-virt kac-abri
+root@kac-zkpr-002 kac kac-zkpr kac-virt kac-abri
+root@kac-zkpr-003 kac kac-zkpr kac-virt kac-abri
+
+root@kac-hist-001 kac kac-hist kac-virt kac-abri
+root@kac-yarn-001 kac kac-yarn kac-virt kac-abri
+root@kac-yarn-002 kac kac-yarn kac-virt kac-abri
+
+root@kac-proj-002 kac kac-proj kac-virt kac-abri
+root@kac-proj-003 kac kac-proj kac-virt kac-abri
+root@kac-proj-005 kac kac-proj kac-virt kac-abri
+root@kac-proj-006 kac kac-proj kac-virt kac-abri
+root@kac-proj-011 kac kac-proj kac-virt kac-abri
+root@kac-proj-012 kac kac-proj kac-virt kac-abri
+root@kac-pint-001 kac kac-proj kac-intern kac-virt kac-abri
+
+root@kac-gpu-001 kac kac-proj kac-abri
+
+root@kac-abri-001 kac kac-virt kac-abri
+root@kac-metr-001 kac kac-virt kac-abri
+root@kac-nfsg-001 kac kac-virt kac-abri
+root@kac-rngr-001 kac kac-virt kac-abri
+root@kac-sol-001 kac kac-virt kac-abri
+
+
+root@kac-adm-001 kac kac-ipa 
+
+root@kac-adm-002 kac kac-ovirt
+root@kac-man-001 kac kac-ovirt
+root@kac-man-002 kac kac-ovirt
+
+root@kac-psql-001 kac
+
+root@kac-clud-001 kac
+
+root@kac-gway-001 kac
+
+root@kac-ipat-001 kac
