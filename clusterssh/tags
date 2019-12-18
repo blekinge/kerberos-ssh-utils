@@ -51,3 +51,33 @@ root@kac-clud-001 kac
 root@kac-gway-001 kac
 
 root@kac-ipat-001 kac
+
+
+root@narcana-data01 narcana narcana-data narcana-ambari
+root@narcana-data02 narcana narcana-data narcana-ambari
+root@narcana-data03 narcana narcana-data narcana-ambari
+root@narcana-data04 narcana narcana-data narcana-ambari
+root@narcana-data05 narcana narcana-data narcana-ambari
+root@narcana-data06 narcana narcana-data narcana-ambari
+root@narcana-data07 narcana narcana-data narcana-ambari
+root@narcana-data08 narcana narcana-data narcana-ambari
+root@narcana-data09 narcana narcana-data narcana-ambari
+root@narcana-data10 narcana narcana-data narcana-ambari
+
+root@narcana-hbase01 narcana narcana-virt narcana-hbase narcana-ambari
+root@narcana-hbase02 narcana narcana-virt narcana-hbase narcana-ambari
+
+root@narcana-hdfs01 narcana narcana-virt narcana-hdfs narcana-ambari
+root@narcana-hdfs02 narcana narcana-virt narcana-hdfs narcana-ambari
+
+root@narcana-suite01 narcana narcana-virt narcana-ambari
+root@narcana-webdanica01 narcana narcana-virt narcana-ambari
+
+root@narcana-yarn01 narcana narcana-virt narcana-yarn narcana-ambari
+root@narcana-yarn02 narcana narcana-virt narcana-yarn narcana-ambari
+root@narcana-history01 narcana narcana-virt narcana-yarn narcana-ambari
+
+root@narcana-ambari01 narcana narcana-virt narcana-ambari
+root@narcana-ametrics01 narcana narcana-virt narcana-ambari
+
+
