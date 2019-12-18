@@ -2,7 +2,7 @@
 
 trap '[ "$?" -ne 77 ] || exit 1' ERR
 set -e
-set -x
+#set -x
 
 
 

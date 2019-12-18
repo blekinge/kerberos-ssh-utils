@@ -2,7 +2,7 @@
 
 SCRIPT_DIR=$(dirname $(readlink -f $BASH_SOURCE[0]))
 
-set -x
+#set -x
 trap '[ "$?" -ne 77 ] || exit 1' ERR
 
 USAGE="create_kac_user.sh PROJECT FIRSTNAME LASTNAME USERNAME EMAIL PHONE"
