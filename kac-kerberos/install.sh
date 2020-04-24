@@ -3,14 +3,18 @@ set -e
 
 SCRIPT_DIR=$(dirname $(readlink -f $BASH_SOURCE[0]))
 
-cp -f -p -- "$SCRIPT_DIR/bin/"* "$HOME/bin/"
+cp -r -f -p -- "$SCRIPT_DIR/bin/"* "$HOME/bin/"
 
 grep -q "source $HOME/bin/login_kac" "$HOME/.bash_aliases" || (echo "source $HOME/bin/login_kac" >> ~/.bash_aliases)
 
 # Pull down bash-preexec file from GitHub and write it to our home directory as a hidden file.
 [ -e ~/.bash-preexec.sh ] || curl https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh -o ~/.bash-preexec.sh
 # Source our file at the end of our bash profile (e.g. ~/.bashrc, ~/.profile, or ~/.bash_profile)
-grep -q "source ~/.bash-preexec.sh" ~/.bashrc || echo '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' >> ~/.bashrc
+
+bashrc_insert='source ~/.bash_aliases
+[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh'
+
+grep -q -F "$bashrc_insert" ~/.bashrc || echo -e "$bashrc_insert" >> ~/.bashrc
 
 diff -w "$SCRIPT_DIR/etc/krb5.conf" "/etc/krb5.conf" | grep  "^<" && \
     echo "You must manually merge $SCRIPT_DIR/etc/krb5.conf and /etc/krb5.conf"
