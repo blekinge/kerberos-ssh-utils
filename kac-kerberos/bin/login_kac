@@ -33,8 +33,6 @@ __previous_command_num=0
 __prompt_command(){
     EXIT="$?"             # This needs to be first
 
-
-
 	__timestamp() {
 	    echo -n "\t "
 	}
