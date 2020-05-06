@@ -5,6 +5,7 @@ SCRIPT_DIR=$(dirname $(readlink -f $BASH_SOURCE[0]))
 
 cp -r -f -p -- "$SCRIPT_DIR/bin/"* "$HOME/bin/"
 
+grep -q "source $HOME/bin/prompt.sh" "$HOME/.bash_aliases" || (echo "source $HOME/bin/prompt.sh" >> ~/.bash_aliases)
 grep -q "source $HOME/bin/login_kac" "$HOME/.bash_aliases" || (echo "source $HOME/bin/login_kac" >> ~/.bash_aliases)
 
 # Pull down bash-preexec file from GitHub and write it to our home directory as a hidden file.
