@@ -66,7 +66,7 @@ ipa group-add-member --user "${USERNAME}" -- kacusers
 ipa group-add-member --user "${USERNAME}" -- vpnu
 
 echo "Refreshing sss-cache to get the user to exist in unix"
-sss-cache -E
+sss_cache -E
 
 echo "Make user home dir /data/home/$USERNAME"
 sudo mkdir -p -- "/data/home/${USERNAME}"
