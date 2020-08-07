@@ -1,11 +1,11 @@
-root@kac-data-001 kac kac-data kac-abri
-root@kac-data-002 kac kac-data kac-abri
-root@kac-data-003 kac kac-data kac-abri
-root@kac-data-004 kac kac-data kac-abri
-root@kac-data-005 kac kac-data kac-abri
-root@kac-data-006 kac kac-data kac-abri
-root@kac-data-007 kac kac-data kac-abri
-root@kac-data-008 kac kac-data kac-abri
+root@kac-data-001.kac.sblokalnet kac kac-data kac-abri
+root@kac-data-002.kac.sblokalnet kac kac-data kac-abri
+root@kac-data-003.kac.sblokalnet kac kac-data kac-abri
+root@kac-data-004.kac.sblokalnet kac kac-data kac-abri
+root@kac-data-005.kac.sblokalnet kac kac-data kac-abri
+root@kac-data-006.kac.sblokalnet kac kac-data kac-abri
+root@kac-data-007.kac.sblokalnet kac kac-data kac-abri
+root@kac-data-008.kac.sblokalnet kac kac-data kac-abri
 
 root@kac-hdfs-001 kac kac-hdfs kac-virt kac-abri
 root@kac-hdfs-002 kac kac-hdfs kac-virt kac-abri
@@ -35,7 +35,7 @@ root@kac-abri-001 kac kac-virt kac-abri
 root@kac-metr-001 kac kac-virt kac-abri
 root@kac-nfsg-001 kac kac-virt kac-abri
 root@kac-rngr-001 kac kac-virt kac-abri
-root@kac-sol-001 kac kac-virt kac-abri
+root@kac-solr-001 kac kac-virt kac-abri
 
 
 root@kac-adm-001 kac kac-ipa 

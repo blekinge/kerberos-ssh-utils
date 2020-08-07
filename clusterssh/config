@@ -75,3 +75,5 @@
 #user=
 #window_tiling=yes
 #window_tiling_direction=right
+ssh=/usr/bin/ssh
+
