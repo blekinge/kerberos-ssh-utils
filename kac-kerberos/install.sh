@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-SCRIPT_DIR=$(dirname $(readlink -f $BASH_SOURCE[0]))
+SCRIPT_DIR=$(dirname "$(readlink -f -- ${BASH_SOURCE[0]})")
 
 cp -r -f -p -- "$SCRIPT_DIR/bin/"* "$HOME/bin/"
 
