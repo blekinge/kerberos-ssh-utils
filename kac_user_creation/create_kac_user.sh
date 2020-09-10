@@ -7,7 +7,7 @@ trap '[ "$?" -ne 77 ] || exit 1' ERR
 
 USAGE="create_kac_user.sh PROJECT FIRSTNAME LASTNAME USERNAME EMAIL PHONE"
 
-echo "Validating parameters $@"
+echo "Validating parameters $*"
 PROJECT="$1"
 [ -n "${PROJECT}" ] || (>&2 echo "$USAGE" &&  exit 77)
 FIRSTNAME="$2"
@@ -22,8 +22,18 @@ PHONE="$6"
 [ -n "${PHONE}" ] || (>&2 echo "$USAGE" &&  exit 77)
 
 
+
 echo "Validating this host $(hostname)"
 hostname | grep kac-adm-001 || (>&2 echo 'must be executed on host kac-adm-001' && exit 77)
+
+EMAIL_PROBLEM=n
+echo "Checking if email $EMAIL is already used by a member of this group $PROJECT"
+ipa group-show ${PROJECT} | grep -F 'Member users' | cut -d':' -f2 | sed 's/,/\n/g' | xargs -r -i bash -c 'echo -ne "{} "; ipa user-show {} | grep Email | cut -d":" -f2' | grep  " ${EMAIL}$" && EMAIL_PROBLEM=y && read -n 1 -p "Email is already present in this group, continue? [y/n] " IGNORE_EMAIL_PRESENT
+
+if [ $EMAIL_PROBLEM == "y" ] && [ "$IGNORE_EMAIL_PRESENT" != "y" ]; then
+  exit 1
+fi
+
 
 echo "Get the group from the project name '$PROJECT'"
 group=$(ipa group-find --group-name=${PROJECT} --posix  | grep "GID:" | cut -d':' -f2 | sed 's/ //g')
