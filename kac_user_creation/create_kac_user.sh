@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-SCRIPT_DIR=$(dirname $(readlink -f $BASH_SOURCE[0]))
+SCRIPT_DIR=$(dirname "$(readlink -f -- ${BASH_SOURCE[0]})")
 
 #set -x
 trap '[ "$?" -ne 77 ] || exit 1' ERR
