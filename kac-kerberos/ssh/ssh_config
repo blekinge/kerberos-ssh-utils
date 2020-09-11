@@ -12,7 +12,7 @@ Host *.sblokalnet
   user $USER
 
 #Ovirt hosts that are NOT freeIPA controlled
-Host kac-man-* kac-adm-002 kac-psql-001
+Host kac-man-* kac-adm-002 kac-psql-001 kac-sto-*
   #Canonalise hostname to load the settings for *.sblokalnet
   CanonicalizeHostname yes
   #Use the kac.sblokalnet network that is only reachable from inside KB
