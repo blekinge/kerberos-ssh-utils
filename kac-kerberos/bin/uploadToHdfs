@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR=$(dirname "$(readlink -f -- ${BASH_SOURCE[0]})")
+
+infile="$1"
+outfile="$2"
+userHost=${3:-abrsadm@kac-proj-000}
+
+tar -czf - "$infile" | ssh $userHost "tar --to-stdout -xzf - | hdfs dfs -put - $outfile"
+
