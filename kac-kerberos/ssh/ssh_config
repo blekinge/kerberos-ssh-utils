@@ -30,6 +30,52 @@ Host kac-*
   #All other kac machines ARE in freeipa, so use kerberos
   GSSAPIAuthentication yes
 
+#All on statsbiblioteket through wonky
+#http://serverfault.com/a/775764
+Host *.sb
+  ForwardAgent yes
+  Compression yes
+  ProxyCommand ssh -A -o Compression=no abr@wonky.statsbiblioteket.dk nc $(echo %h | sed 's/\(.\)\..*/\1/') %p
+
+
+
+#Digitv hosts
+Host digitv-devel
+  Compression yes
+  ForwardAgent yes
+  User digitv
+  ProxyCommand ssh -A -o Compression=no abr@wonky.statsbiblioteket.dk nc digitv-devel 22
+
+Host digitv-stage
+  Compression yes
+  ForwardAgent yes
+  User develro
+  ProxyCommand ssh -A -o Compression=no abr@wonky.statsbiblioteket.dk nc digitv-stage 22
+
+Host digitv-prod
+  Compression yes
+  ForwardAgent yes
+  User develro
+  ProxyCommand ssh -A -o Compression=no abr@wonky.statsbiblioteket.dk nc digitv-prod 22
+
+
+Host kb-test-bar-*
+  CanonicalDomains bitarkiv.kb.dk
+  CanonicalizeHostname always
+  ForwardAgent yes
+  HostKeyAlgorithms +ssh-dss
+  ProxyCommand ssh -A -q -x devel@kb-prod-udv-001.kb.dk -W %h:22
+
+Host kb-stag-bit-001.bitarkiv
+  ProxyCommand sshpass -pbadevel123 ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no -l ba-devel %h.kbh
+
+
+Host *.kbh
+  ForwardAgent yes
+  Compression yes
+  HostkeyAlgorithms +ssh-dss
+  ProxyCommand ssh -oProxyCommand=none -W $(echo "%h" | sed 's/\.kbh$/.kb.dk:22/') -o Compression=no  devel@kb-prod-udv-001.kb.dk
+
 #This should be last, to ensure it does not override other settings, as the first hit wins
 Host *
     ServerAliveInterval 240
