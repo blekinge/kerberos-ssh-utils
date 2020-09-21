@@ -30,6 +30,14 @@ Host kac-*
   #All other kac machines ARE in freeipa, so use kerberos
   GSSAPIAuthentication yes
 
+
+Host roda0* gara0* guro0* mora0* admn0* file0* gway0* bind0* fipa0* rlog0* ovim0* ovis0* elog0* nfsg0* hdfs0* zkpr0* hbse0* hive0* psql0* abri0* yarn0* hist0* ozie0* metr0* rngr0* solr0* fipa0* proj0*
+  CanonicalizeHostname yes
+  CanonicalDomains yak2.net
+  CanonicalizeFallbackLocal yes
+
+
+
 #All on statsbiblioteket through wonky
 #http://serverfault.com/a/775764
 Host *.sb
