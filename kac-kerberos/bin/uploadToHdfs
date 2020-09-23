@@ -6,5 +6,11 @@ infile="$1"
 outfile="$2"
 userHost=${3:-abrsadm@kac-proj-000}
 
+if [ -z "$infile" ] || [ "-h" = "$infile" ] ; then
+  echo "USAGE: uploadToHdfs <infile> <hdfs_file_path> [<userHost>]"
+  echo "If not specified, userHost will default to abrsadm@kac-proj-000"
+fi
+
+
 tar -czf - "$infile" | ssh $userHost "tar --to-stdout -xzf - | hdfs dfs -put - $outfile"
 
