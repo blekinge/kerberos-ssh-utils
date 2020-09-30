@@ -31,7 +31,7 @@ fi
 
 
 #Update google chrome desktop links
-insert='--auth-server-whitelist=\*\.kach\.sblokalnet,\*\.kac\.sblokalnet'
+insert='--auth-server-whitelist=\*\.kach\.sblokalnet,\*\.kac\.sblokalnet,\*\.yak2\.net'
 
 find "$HOME/.local" 2>/dev/null | grep "chrome" | grep "\.desktop" | xargs -r -I'{}' sed -i "/$insert/!s|\(Exec=.*google-chrome.*\)|\1 $insert|g" "{}"
 
