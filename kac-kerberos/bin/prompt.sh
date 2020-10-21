@@ -11,9 +11,10 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 PS0="\t "
 
 #This prints the command being executed
-preexec_functions=()
-__preexec_print_command() { echo "'$@'"; }
+#preexec_functions=() # This breaks the functionality, as something in .bash-preexec.sh binds to the old array
+__preexec_print_command() { echo "command: '$*'"; }
 preexec_functions+=(__preexec_print_command)
+# TODO how to ensure a command is not added twice?
 
 
 
