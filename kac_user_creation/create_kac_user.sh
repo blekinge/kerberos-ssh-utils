@@ -82,7 +82,7 @@ echo "Make user home dir /data/home/$USERNAME"
 sudo mkdir -p -- "/data/home/${USERNAME}"
 sudo cp -u -- /etc/skel/.bash* "/data/home/${USERNAME}/"
 sudo chown -R -- "${uid}:${uid}" "/data/home/${USERNAME}"
-sudo chmod  -o-rwx -- "/data/home/${USERNAME}"
+sudo chmod  0750 -- "/data/home/${USERNAME}"
 
 INITIAL_PASSWORD=$(openssl rand -base64 25)
 echo "Set initial password $INITIAL_PASSWORD for $USERNAME"
