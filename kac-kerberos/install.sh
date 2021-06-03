@@ -30,10 +30,23 @@ if [[ -e "/usr/share/applications/brave-browser.desktop" && ! -e ~/.local/share/
     cp -a /usr/share/applications/brave-browser.desktop ~/.local/share/applications/brave-browser.desktop
 fi
 
-
 #Update google chrome desktop links
-insert='--auth-server-whitelist=\*\.kach\.sblokalnet,\*\.kac\.sblokalnet,\*\.yak2\.net,\*\.kb.dk,\*\.kbhpc\.kb\.dk'
+function fixChromiumBasedBrowser(){
+  echo ""
 
-find "$HOME/.local" 2>/dev/null | grep "chrome" | grep "\.desktop" | xargs -r -I'{}' sed -i "/$insert/!s|\(Exec=.*google-chrome.*\)|\1 $insert|g" "{}"
+  domains='\*\.kach\.sblokalnet,\*\.kac\.sblokalnet,\*\.yak2\.net,\*\.kb\.dk,\*\.kbhpc\.kb\.dk'
+  #domains='\*'
+  insert="--auth-server-whitelist=$domains --auth-negotiate-delegate-whitelist=$domains"
 
-find "$HOME/.local" 2>/dev/null | grep "brave-browser" | grep "\.desktop" | xargs -r -I'{}' sed -i "/$insert/!s|\(Exec=.*brave-browser.*\)|\1 $insert|g" "{}"
+  find "$HOME/.local" 2>/dev/null | grep "$1" | grep "\.desktop" | xargs -r -I'{}' sed -E -i "s|(--auth-server-whitelist=\\S*)||g" "{}"
+  find "$HOME/.local" 2>/dev/null | grep "$1" | grep "\.desktop" | xargs -r -I'{}' sed -E -i "s|(--auth-negotiate-delegate-whitelist=\\S*)||g" "{}"
+  find "$HOME/.local" 2>/dev/null | grep "$1" | grep "\.desktop" | xargs -r -I'{}' sed -i "/$insert/!s|\(Exec=.*brave-browser.*\)|\1 $insert|g" "{}"
+
+  find "$HOME/.local" 2>/dev/null | grep "$1" | grep "\.desktop" | xargs -r -I'{}' sed -i '/^Exec=/ s/\s\+/ /g' "{}"
+
+  echo "$1"
+  find "$HOME/.local" 2>/dev/null | grep "$1" | grep "\.desktop" | xargs -r -I'{}' grep "Exec" "{}"
+}
+
+fixChromiumBasedBrowser brave-browser
+fixChromiumBasedBrowser google-chrome
