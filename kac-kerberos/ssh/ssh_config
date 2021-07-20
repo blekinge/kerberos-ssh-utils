@@ -1,6 +1,28 @@
 # Do not hash the values in known hosts, as this make it human unreadable
 HashKnownHosts no
 
+# Where to dump control devices
+ControlPath ~/.ssh_control/control-%h-%p-%r
+
+# Run the controlMaster in the background. If no client connection uses it in 5 seconds, shut it down
+# This prevents the problem with a hanging control master connection
+ControlPersist 5s
+
+Host abr-pc
+  ForwardAgent yes
+  Compression yes
+
+# when connecting as larm@miaplacidus, add some port forwards
+Host miaplacidus
+Match User larm
+  ForwardAgent yes
+  Compression yes
+  LocalForward 9311 localhost:9311
+  LocalForward 7311 localhost:7311
+  # Use control master, so we will not try to create the port forwards again for each connection
+  ControlMaster auto
+
+
 Host *.sblokalnet
   #Forward agent so you can ssh further
   ForwardAgent yes
