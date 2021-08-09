@@ -1,7 +1,7 @@
 # Do not hash the values in known hosts, as this make it human unreadable
 HashKnownHosts no
 
-Host *.sblokalnet
+Host *.sblokalnet narchive-*
   #Forward agent so you can ssh further
   ForwardAgent yes
   #Use Kerberos
