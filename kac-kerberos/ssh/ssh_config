@@ -27,7 +27,7 @@ Match User larm
   ControlMaster auto
 
 
-Host *.sblokalnet
+Host *.sblokalnet narchive-*
   #Forward agent so you can ssh further
   ForwardAgent yes
   #Use Kerberos
