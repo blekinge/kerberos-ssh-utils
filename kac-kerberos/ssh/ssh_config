@@ -8,6 +8,10 @@ ControlPath ~/.ssh_control/control-%h-%p-%r
 # This prevents the problem with a hanging control master connection
 ControlPersist 5s
 
+Host narchive-p-* prod-hadoop-bur-*
+  CanonicalizeHostname yes
+  CanonicalDomains hadoop-mgmt.bitarkiv.kb.dk
+
 Host abr-pc
   ForwardAgent yes
   Compression yes
