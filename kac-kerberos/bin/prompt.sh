@@ -35,7 +35,8 @@ __prompt_command() {
     #Kerberos ticket user
     if command -v klist >/dev/null 2>&1; then
       #  \K        [6]  Keep the stuff left of the \K, don't include it in $&
-      local kerberos="$( (klist 2>/dev/null || echo '') | grep -oP 'principal: \K[^@]+')"
+      #      https://stackoverflow.com/a/33573989
+      local kerberos="$( (klist 2>/dev/null || echo '') | grep --only-matching --perl-regexp 'principal: \K[^@]+')"
       if [ -n "${kerberos}" ]; then
         echo -n "(krb:$kerberos) "
       fi

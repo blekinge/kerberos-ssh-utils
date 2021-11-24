@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
+
 SCRIPT_DIR=$(dirname "$(readlink -f -- ${BASH_SOURCE[0]})")
 
 cp -r -f -p -- "$SCRIPT_DIR/bin/"* "$HOME/bin/"
+
+set -x
 
 grep -q "source $HOME/bin/java_home.sh" "$HOME/.bash_aliases" || (echo "source $HOME/bin/java_home.sh" >> ~/.bash_aliases)
 grep -q "source $HOME/bin/prompt.sh" "$HOME/.bash_aliases" || (echo "source $HOME/bin/prompt.sh" >> ~/.bash_aliases)
@@ -14,8 +17,7 @@ grep -q "source $HOME/bin/sshwd.sh" "$HOME/.bash_aliases" || (echo "source $HOME
 wget -N "https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh" --directory-prefix "~/"
 # Source our file at the end of our bash profile (e.g. ~/.bashrc, ~/.profile, or ~/.bash_profile)
 
-bashrc_insert='source ~/.bash_aliases
-[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh'
+bashrc_insert='[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh'
 grep -v "^\s*$" ~/.bashrc | tail -2| head -2 | grep -q -F "$bashrc_insert" || echo -e "$bashrc_insert" >> ~/.bashrc
 
 diff -w "$SCRIPT_DIR/etc/krb5.conf" "/etc/krb5.conf" | grep  "^<" && \
