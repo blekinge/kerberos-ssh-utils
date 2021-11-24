@@ -21,6 +21,9 @@ YELLOW="\[\033[33;1m\]"
 WHITE="\[\033[37;1m\]"
 GREEN="\[\033[01;32m\]"
 BLUE="\[\033[01;34m\]"
+TURQ="\[\033[00;36m\]"
+
+#TODO learn apropos
 
 __previous_command_num=0
 
@@ -58,7 +61,7 @@ __prompt_command() {
 
   __path() {
     #User, host, workingDir
-    echo -ne "$GREEN\u@\h$NORMAL:$BLUE\w$NORMAL\$ "
+    echo -ne "$GREEN\u@\h$NORMAL:$TURQ\w$NORMAL\$ "
   }
 
   __term_title() {
