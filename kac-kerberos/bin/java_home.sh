@@ -28,8 +28,15 @@ pathappend () {
 }
 
 
+export JAVA17='/usr/lib/jvm/java-17'
 export JAVA11='/usr/lib/jvm/java-11'
 export JAVA8='/usr/lib/jvm/java-1.8.0'
+
+function java17env() {
+        [ -z "$JAVA_HOME" ] || pathremove "$JAVA_HOME/bin"
+        export JAVA_HOME="$JAVA17"
+        pathprepend "$JAVA_HOME/bin"
+}
 
 function java11env(){
         [ -z "$JAVA_HOME" ] || pathremove "$JAVA_HOME/bin"
@@ -42,3 +49,4 @@ function java8env() {
         export JAVA_HOME="$JAVA8"
         pathprepend "$JAVA_HOME/bin"
 }
+
